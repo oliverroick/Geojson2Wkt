@@ -1,0 +1,16 @@
+{
+    "name": "Json2Wkt"
+  , "author": "Oliver Roick"
+  , "version": "0.1"
+  , "description": "Converter to parse GeoJSON objects in WKT format"
+  , "keywords": [
+         "GeoJSON",
+         "WKT"
+    ]
+  , "license": "MIT"
+  , "repository": "git://github.com/oliverroick/Json2Wkt"
+  , "main": "./Json2Wkt.js"
+  , "engines": { "node": "*" }
+  , "dependencies": {
+    }
+}
