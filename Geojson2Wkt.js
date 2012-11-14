@@ -63,7 +63,7 @@ Geojson2Wkt.parsePolygonGeometry = function (coordinates) {
  * 
  */
 Geojson2Wkt.prototype.convert = function (json) {
-	var wkt = [], coordinates;
+	var wkt = '', coordinates;
 
 	if (!json) new Error('No geojson object passed to the method.');
 
@@ -73,24 +73,18 @@ Geojson2Wkt.prototype.convert = function (json) {
 
 	switch (json.type) {
 		case 'Point': 
-			wkt.push('POINT(');
-			wkt.push(this.parsePointGeometry(coordinates));
-			wkt.push(')');
+			wkt = this.parsePointGeometry(coordinates);
 			break;
 		case 'LineString': 
-			wkt.push('LINETSTRING(');
-			wkt.push(this.parseLineGeometry(coordinates));
-			wkt.push(')');
+			wkt = this.parseLineGeometry(coordinates);
 			break;
 		case 'Polygon': 
-			wkt.push('POLYGON(');
-			wkt.push(this.parsePolygonGeometry(coordinates));
-			wkt.push(')');
+			wkt = this.parsePolygonGeometry(coordinates);
 			break;
 		default: 
 			throw new Error('Not able to parse geometry. Property type not set in GeoJSON object.');
 	}
-	return wkt.join('');
+	return [json.type.toUpperCase(), wkt, ')'].join('');
 }
 
 
