@@ -1,20 +1,36 @@
 /**
- * Json2Wkt
+ * Geojson2Wkt
  * @author Oliver Roick <https://github.com/oliverroick>
  * @version 0.0.1
  * Date: 11/14/2012
  * Homepage: https://github.com/oliverroick/geo-converter
  */
 
-function Json2Wkt () {
-	if (Json2Wkt.caller != Json2Wkt.getInstance) throw new Error("This object cannot be instanciated");
+
+/*
+ * Constructor
+ */
+
+function Geojson2Wkt () {
+	if (Geojson2Wkt.caller != Geojson2Wkt.getInstance) throw new Error("This object cannot be instanciated");
 }
 
-Json2Wkt.parsePointGeometry = function (coordinates) {
+/*
+ * Returns string containing the coordinates of a point geometry
+ * @function
+ * @private
+ */
+Geojson2Wkt.parsePointGeometry = function (coordinates) {
 	return [coordinates[0], coordinates[1]].join(' ');
 };
 
-Json2Wkt.parseLineGeometry = function (coordinates) {
+/*
+ * Returns string containing the coordinates of a line geometry. Breaks coordinates array into single 
+ * latitude-/longitude pairs and uses parsePointGeometry to parse node.
+ * @function
+ * @private
+ */
+Geojson2Wkt.parseLineGeometry = function (coordinates) {
 	var lineWkt = [];
 	for (var i = 0; i < coordinates.length; i++) {
 		if (i > 0) lineWkt.push(', ');
@@ -23,7 +39,13 @@ Json2Wkt.parseLineGeometry = function (coordinates) {
 	return lineWkt.join('');
 };
 
-Json2Wkt.parsePolygonGeometry = function (coordinates) {
+/*
+ * Returns string containing the coordinates of a polygon geometry. Breaks linstring array into single 
+ * latitude-/longitude pairs and uses parseLineGeometry to parse line segments.
+ * @function
+ * @private
+ */
+Geojson2Wkt.parsePolygonGeometry = function (coordinates) {
 	var polygonWkt = [];
 	for (var i = 0; i < coordinates.length; i++) {
 		polygonWkt.push('(');
@@ -34,7 +56,13 @@ Json2Wkt.parsePolygonGeometry = function (coordinates) {
 	return polygonWkt.join('');
 };
 
-Json2Wkt.prototype.convert = function (json) {
+/*
+ * Returns string WKT represenation of the GeoJSON geometry passed to the method. 
+ *
+ * @param json {string|object} The GeoJSON gemetry to be parsed.
+ * 
+ */
+Geojson2Wkt.prototype.convert = function (json) {
 		var wkt = [], coordinates;
 
 		if (!json) new Error('No geojson object passed to the method.');
@@ -69,16 +97,17 @@ Json2Wkt.prototype.convert = function (json) {
 /* ************************************************************************
 SINGLETON CLASS DEFINITION
 ************************************************************************ */
- 
+
+Geojson2Wkt.instance = null;
+
 /**
  * Singleton getInstance definition
  * @return singleton class
  */
-Json2Wkt.instance = null;
 
-Json2Wkt.getInstance = function () {
-    if(this.instance === null) this.instance = new Json2Wkt();
+Geojson2Wkt.getInstance = function () {
+    if(this.instance === null) this.instance = new Geojson2Wkt();
     return this.instance;
 }
 
-module.exports = Json2Wkt.getInstance();
+module.exports = Geojson2Wkt.getInstance();
