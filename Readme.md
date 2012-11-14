@@ -1,6 +1,6 @@
 # Json2Wkt
 
-Node module to onvert [GeoJSON](http://geojson.org/) geometry objects or string representations into [WKT](http://en.wikipedia.org/wiki/Well-known_text) format.
+Node module to convert [GeoJSON](http://geojson.org/) geometry objects or string representations into [WKT](http://en.wikipedia.org/wiki/Well-known_text) format.
 
 **The module is in development phase and has not been tested yet.**
 
