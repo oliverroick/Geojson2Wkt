@@ -12,40 +12,34 @@
  */
 
 function Geojson2Wkt () {
-	if (Geojson2Wkt.caller != Geojson2Wkt.getInstance) throw new Error("This object cannot be instanciated");
+	if (Geojson2Wkt.caller !== Geojson2Wkt.getInstance) throw new Error("This object cannot be instanciated");
 }
 
 /*
  * Returns string containing the coordinates of a point geometry
- * @function
- * @private
  */
-Geojson2Wkt.parsePointGeometry = function (coordinates) {
+Geojson2Wkt.prototype.parsePointGeometry = function (coordinates) {
 	return [coordinates[0], coordinates[1]].join(' ');
-};
+}
 
 /*
  * Returns string containing the coordinates of a line geometry. Breaks coordinates array into single 
  * latitude-/longitude pairs and uses parsePointGeometry to parse node.
- * @function
- * @private
  */
-Geojson2Wkt.parseLineGeometry = function (coordinates) {
+Geojson2Wkt.prototype.parseLineGeometry = function (coordinates) {
 	var lineWkt = [];
 	for (var i = 0; i < coordinates.length; i++) {
 		if (i > 0) lineWkt.push(', ');
 		lineWkt.push(this.parsePointGeometry(coordinates[i]));
 	}
 	return lineWkt.join('');
-};
+}
 
 /*
  * Returns string containing the coordinates of a polygon geometry. Breaks linstring array into single 
- * latitude-/longitude pairs and uses parseLineGeometry to parse line segments.
- * @function
- * @private
+ * line segment arrays and uses parseLineGeometry to parse line segments.
  */
-Geojson2Wkt.parsePolygonGeometry = function (coordinates) {
+Geojson2Wkt.prototype.parsePolygonGeometry = function (coordinates) {
 	var polygonWkt = [];
 	for (var i = 0; i < coordinates.length; i++) {
 		polygonWkt.push('(');
@@ -54,13 +48,12 @@ Geojson2Wkt.parsePolygonGeometry = function (coordinates) {
 		polygonWkt.push(')');
 	}
 	return polygonWkt.join('');
-};
+}
 
 /*
  * Returns string WKT represenation of the GeoJSON geometry passed to the method. 
  *
  * @param json {string|object} The GeoJSON gemetry to be parsed.
- * 
  */
 Geojson2Wkt.prototype.convert = function (json) {
 	var wkt = '', coordinates;
@@ -84,9 +77,10 @@ Geojson2Wkt.prototype.convert = function (json) {
 		default: 
 			throw new Error('Not able to parse geometry. Property type not set in GeoJSON object.');
 	}
-	return [json.type.toUpperCase(), wkt, ')'].join('');
+	return [json.type.toUpperCase(), '(', wkt, ')'].join('');
 }
 
+console.log(Geojson2Wkt.parsePointGeometry);
 
 /* ************************************************************************
 SINGLETON CLASS DEFINITION
