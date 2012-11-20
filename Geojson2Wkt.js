@@ -23,16 +23,38 @@ Geojson2Wkt.prototype.parsePointGeometry = function (coordinates) {
 }
 
 /*
+ * 
+ */
+Geojson2Wkt.prototype.parseMultiPointGeometry = function (coordinates) {
+	var multipointWkt = [];
+	for (var i = 0; i < coordinates.length; i++) {
+		multipointWkt.push(this.parsePointGeometry(coordinates[i]));
+	}
+	return multipointWkt.join(', ');
+}
+
+/*
  * Returns string containing the coordinates of a line geometry. Breaks coordinates array into single 
  * latitude-/longitude pairs and uses parsePointGeometry to parse node.
  */
 Geojson2Wkt.prototype.parseLineGeometry = function (coordinates) {
 	var lineWkt = [];
 	for (var i = 0; i < coordinates.length; i++) {
-		if (i > 0) lineWkt.push(', ');
 		lineWkt.push(this.parsePointGeometry(coordinates[i]));
 	}
-	return lineWkt.join('');
+	return lineWkt.join(', ');
+}
+
+/*
+ *
+ */
+Geojson2Wkt.prototype.parseMultiLineGeometry = function (coordinates) {
+	var multiLineWkt = [];
+	for (var i = 0; i < coordinates.length; i++) {
+		multiLineWkt.push('(' + this.parseLineGeometry(coordinates[i]) + ')');
+	}
+
+	return multiLineWkt.join(', ');
 }
 
 /*
@@ -42,12 +64,20 @@ Geojson2Wkt.prototype.parseLineGeometry = function (coordinates) {
 Geojson2Wkt.prototype.parsePolygonGeometry = function (coordinates) {
 	var polygonWkt = [];
 	for (var i = 0; i < coordinates.length; i++) {
-		polygonWkt.push('(');
-		if (i > 0) polygonWkt.push(', ');
-		polygonWkt.push(this.parseLineGeometry(coordinates[i]));
-		polygonWkt.push(')');
+		polygonWkt.push('(' + this.parseLineGeometry(coordinates[i]) + ')');
 	}
-	return polygonWkt.join('');
+	return polygonWkt.join(', ');
+}
+
+/*
+ *
+ */
+Geojson2Wkt.prototype.parseMultiPolygonGeometry = function (coordinates) {
+	var multiPolygonWkt = [];
+	for (var i = 0; i < coordinates.length; i++) {
+		multiPolygonWkt.push('(' + this.parsePolygonGeometry(coordinates[i]) + ')');
+	}
+	return multiPolygonWkt.join(', ');
 }
 
 /*
@@ -68,19 +98,26 @@ Geojson2Wkt.prototype.convert = function (json) {
 		case 'Point': 
 			wkt = this.parsePointGeometry(coordinates);
 			break;
+		case 'MultiPoint': 
+			wkt = this.parseMultiPointGeometry(coordinates);
+			break;
 		case 'LineString': 
 			wkt = this.parseLineGeometry(coordinates);
 			break;
+		case 'MultiLineString': 
+			wkt = this.parseMultiLineGeometry(coordinates);
+			break;
 		case 'Polygon': 
 			wkt = this.parsePolygonGeometry(coordinates);
+			break;
+		case 'MultiPolygon': 
+			wkt = this.parseMultiPolygonGeometry(coordinates);
 			break;
 		default: 
 			throw new Error('Not able to parse geometry. Property type not set in GeoJSON object.');
 	}
 	return [json.type.toUpperCase(), '(', wkt, ')'].join('');
 }
-
-console.log(Geojson2Wkt.parsePointGeometry);
 
 /* ************************************************************************
 SINGLETON CLASS DEFINITION
