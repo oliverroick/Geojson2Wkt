@@ -23,6 +23,7 @@ Or parse a string representation of a GeoJson object. The method automatically p
 - write tests
 - documentation
 - Extend convert method to support
-    - MultiPoint
-    - MultiLinestring
-    - Multipolygon
+    - -MultiPoint-
+    - -MultiLinestring-
+    - -Multipolygon-
+    - GeometryCollection
