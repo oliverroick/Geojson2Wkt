@@ -9,7 +9,7 @@
     ]
   , "license": "MIT"
   , "repository": "git://github.com/oliverroick/Geojson2Wkt"
-  , "main": "./Json2Wkt.js"
+  , "main": "./Geojson2Wkt.js"
   , "engines": { "node": "*" }
   , "dependencies": {
     }

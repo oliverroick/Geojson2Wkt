@@ -6,27 +6,22 @@
  * Homepage: https://github.com/oliverroick/geo-converter
  */
 
-var Geojson2Wkt = (function(){
-	var instance;
-	
-	/*
-	 * Constructor
-	 */
-	function geojson2Wkt() {
-		
-	}
+module.exports = (function(exports) {
+	'use strict';
+
+	var converter = {};
 
 	/*
 	 * Returns string containing the coordinates of a point geometry
 	 */
-	var parsePointGeometry = function(coordinates) {
+	function parsePointGeometry (coordinates) {
 		return [coordinates[0], coordinates[1]].join(' ');
 	}
 
 	/*
 	 * 
 	 */
-	var parseMultiPointGeometry = function(coordinates) {
+	function parseMultiPointGeometry (coordinates) {
 		var multipointWkt = [];
 		for (var i = 0; i < coordinates.length; i++) {
 			multipointWkt.push(parsePointGeometry(coordinates[i]));
@@ -38,7 +33,7 @@ var Geojson2Wkt = (function(){
 	 * Returns string containing the coordinates of a line geometry. Breaks coordinates array into single 
 	 * latitude-/longitude pairs and uses parsePointGeometry to parse node.
 	 */
-	var parseLineGeometry = function(coordinates) {
+	function parseLineGeometry (coordinates) {
 		var lineWkt = [];
 		for (var i = 0; i < coordinates.length; i++) {
 			lineWkt.push(parsePointGeometry(coordinates[i]));
@@ -49,7 +44,7 @@ var Geojson2Wkt = (function(){
 	/*
 	 *
 	 */
-	var parseMultiLineGeometry = function(coordinates) {
+	function parseMultiLineGeometry (coordinates) {
 		var multiLineWkt = [];
 		for (var i = 0; i < coordinates.length; i++) {
 			multiLineWkt.push('(' + parseLineGeometry(coordinates[i]) + ')');
@@ -62,7 +57,7 @@ var Geojson2Wkt = (function(){
 	 * Returns string containing the coordinates of a polygon geometry. Breaks linstring array into single 
 	 * line segment arrays and uses parseLineGeometry to parse line segments.
 	 */
-	var parsePolygonGeometry = function(coordinates) {
+	function parsePolygonGeometry(coordinates) {
 		var polygonWkt = [];
 		for (var i = 0; i < coordinates.length; i++) {
 			polygonWkt.push('(' + parseLineGeometry(coordinates[i]) + ')');
@@ -73,7 +68,7 @@ var Geojson2Wkt = (function(){
 	/*
 	 *
 	 */
-	var parseMultiPolygonGeometry = function(coordinates) {
+	function parseMultiPolygonGeometry(coordinates) {
 		var multiPolygonWkt = [];
 		for (var i = 0; i < coordinates.length; i++) {
 			multiPolygonWkt.push('(' + parsePolygonGeometry(coordinates[i]) + ')');
@@ -86,7 +81,7 @@ var Geojson2Wkt = (function(){
 	 *
 	 * @param json {string|object} The GeoJSON gemetry to be parsed.
 	 */
-	geojson2Wkt.prototype.convert = function (json) {
+	 converter.convert = function (json) {
 		var wkt = '', coordinates;
 
 		if (!json) new Error('No geojson object passed to the method.');
@@ -97,36 +92,29 @@ var Geojson2Wkt = (function(){
 		coordinates = json.coordinates;
 
 		switch (json.type) {
-			case 'Point': 
+			case 'Point':
 				wkt = parsePointGeometry(coordinates);
 				break;
-			case 'MultiPoint': 
+			case 'MultiPoint':
 				wkt = parseMultiPointGeometry(coordinates);
 				break;
-			case 'LineString': 
+			case 'LineString':
 				wkt = parseLineGeometry(coordinates);
 				break;
-			case 'MultiLineString': 
+			case 'MultiLineString':
 				wkt = parseMultiLineGeometry(coordinates);
 				break;
-			case 'Polygon': 
+			case 'Polygon':
 				wkt = parsePolygonGeometry(coordinates);
 				break;
-			case 'MultiPolygon': 
+			case 'MultiPolygon':
 				wkt = parseMultiPolygonGeometry(coordinates);
 				break;
-			default: 
+			default:
 				throw new Error('Not able to parse geometry. Property type not set in GeoJSON object.');
 		}
 		return [json.type.toUpperCase(), '(', wkt, ')'].join('');
 	}
 
-	var createInstance = function () {
-		if (!instance) instance = new geojson2Wkt();
-		return instance;
-	}
-
-	return new createInstance();
-})();
-
-module.exports = Geojson2Wkt;
+	return converter;
+}());
