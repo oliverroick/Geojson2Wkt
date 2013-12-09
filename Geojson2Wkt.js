@@ -6,20 +6,21 @@
  * Homepage: https://github.com/oliverroick/geo-converter
  */
 
-module.exports = (function(exports) {
+module.exports = (function() {
 	'use strict';
 
 	var converter = {};
 
 	/*
-	 * Returns string containing the coordinates of a point geometry
+	 * Returns string containing the coordinates of a point geometry. Breaks coordinates array into single 
+	 * latitude-/longitude pairs and uses parsePointGeometry to parse node.
 	 */
 	function parsePointGeometry (coordinates) {
 		return [coordinates[0], coordinates[1]].join(' ');
 	}
 
 	/*
-	 * 
+	 * Returns string containing the coordinates of a multipoint geometry.
 	 */
 	function parseMultiPointGeometry (coordinates) {
 		var multipointWkt = [];
@@ -42,7 +43,8 @@ module.exports = (function(exports) {
 	}
 
 	/*
-	 *
+	 * Returns string containing the coordinates of a multi line geometry. Breaks linstring array into single 
+	 * line segment arrays and uses parseLineGeometry to parse line segments.
 	 */
 	function parseMultiLineGeometry (coordinates) {
 		var multiLineWkt = [];
@@ -66,7 +68,8 @@ module.exports = (function(exports) {
 	}
 
 	/*
-	 *
+	 * Returns string containing the coordinates of a multi polygon geometry. Breaks polygon array into single 
+	 * polygon arrays and uses parsePolygonGeometry to parse polygons.
 	 */
 	function parseMultiPolygonGeometry(coordinates) {
 		var multiPolygonWkt = [];
@@ -84,34 +87,42 @@ module.exports = (function(exports) {
 	 converter.convert = function (json) {
 		var wkt = '', coordinates;
 
-		if (!json) new Error('No geojson object passed to the method.');
+		if (!json) throw new Error('Not able to parse Geometry. No argument or null passed.');
 
 		// check if JSON is passed as String and convert to object
-		if (typeof json === 'string') json = JSON.parse(json);
+		if (typeof json === 'string') {
+			try {
+				json = JSON.parse(json);
+			} catch (e) {
+				throw new Error('Not able to parse Geometry. Invalid String.');
+			}
+		} else if (typeof json !== 'object') {
+			throw new Error('Not able to parse Geometry. Invalid data type.');
+		}
 
-		coordinates = json.coordinates;
+		if (!json.coordinates) throw new Error('Not able to parse geometry. Property geometry not set.');
 
 		switch (json.type) {
 			case 'Point':
-				wkt = parsePointGeometry(coordinates);
+				wkt = parsePointGeometry(json.coordinates);
 				break;
 			case 'MultiPoint':
-				wkt = parseMultiPointGeometry(coordinates);
+				wkt = parseMultiPointGeometry(json.coordinates);
 				break;
 			case 'LineString':
-				wkt = parseLineGeometry(coordinates);
+				wkt = parseLineGeometry(json.coordinates);
 				break;
 			case 'MultiLineString':
-				wkt = parseMultiLineGeometry(coordinates);
+				wkt = parseMultiLineGeometry(json.coordinates);
 				break;
 			case 'Polygon':
-				wkt = parsePolygonGeometry(coordinates);
+				wkt = parsePolygonGeometry(json.coordinates);
 				break;
 			case 'MultiPolygon':
-				wkt = parseMultiPolygonGeometry(coordinates);
+				wkt = parseMultiPolygonGeometry(json.coordinates);
 				break;
 			default:
-				throw new Error('Not able to parse geometry. Property type not set in GeoJSON object.');
+				throw new Error('Not able to parse geometry. Property type not set.');
 		}
 		return [json.type.toUpperCase(), '(', wkt, ')'].join('');
 	}
