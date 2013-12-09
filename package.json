@@ -1,7 +1,7 @@
 {
-    "name": "Geojson2Wkt"
+    "name": "geojson2wkt"
   , "author": "Oliver Roick"
-  , "version": "1.0"
+  , "version": "1.0.0"
   , "description": "Converter to parse GeoJSON geometries in WKT format"
   , "keywords": [
          "GeoJSON",
