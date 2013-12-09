@@ -1,15 +1,13 @@
 /**
  * Geojson2Wkt
  * @author Oliver Roick <https://github.com/oliverroick>
- * @version 0.0.1
- * Date: 11/14/2012
- * Homepage: https://github.com/oliverroick/geo-converter
+ * @version 1.0
+ * Date: 09/12/2013
+ * Homepage: https://github.com/oliverroick/Geojson2Wkt
  */
 
-module.exports = (function() {
+(function(global) {
 	'use strict';
-
-	var converter = {};
 
 	/*
 	 * Returns string containing the coordinates of a point geometry. Breaks coordinates array into single 
@@ -69,7 +67,7 @@ module.exports = (function() {
 
 	/*
 	 * Returns string containing the coordinates of a multi polygon geometry. Breaks polygon array into single 
-	 * polygon arrays and uses parsePolygonGeometry to parse polygons.
+	 * polygon arrays and uses parsePolygonGeometry to parse polygonsg.
 	 */
 	function parseMultiPolygonGeometry(coordinates) {
 		var multiPolygonWkt = [];
@@ -84,7 +82,7 @@ module.exports = (function() {
 	 *
 	 * @param json {string|object} The GeoJSON gemetry to be parsed.
 	 */
-	 converter.convert = function (json) {
+	 function convert(json) {
 		var wkt = '', coordinates;
 
 		if (!json) throw new Error('Not able to parse Geometry. No argument or null passed.');
@@ -127,5 +125,5 @@ module.exports = (function() {
 		return [json.type.toUpperCase(), '(', wkt, ')'].join('');
 	}
 
-	return converter;
-}());
+	global.convert = convert;
+}(module.exports));
