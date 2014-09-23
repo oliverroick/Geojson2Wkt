@@ -19,6 +19,14 @@ Parse a GeoJSON object
 Or parse a string representation of a GeoJson object. The method automatically parses the string into an object.
 
     Geojson2wkt.convert('{"type": "Point", "coordinates": [102.0, 0.5]}'); // -- 'POINT(102 0.5)'
+    
+## Testing
+
+Tests require [nodeunit](https://github.com/caolan/nodeunit).
+
+Running tests
+
+    nodeunit tests/test.js
 
 ## Roadmap
 
