@@ -2,6 +2,8 @@
 
 Node module to convert [GeoJSON](http://geojson.org/) geometry objects or string representations into [WKT](http://en.wikipedia.org/wiki/Well-known_text) format.
 
+[![Build Status](https://travis-ci.org/oliverroick/Geojson2Wkt.svg?branch=master)](https://travis-ci.org/oliverroick/Geojson2Wkt)
+
 ## Install
 
 	npm install geojson2wkt
