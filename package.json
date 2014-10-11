@@ -21,6 +21,6 @@
   },
   "scripts": {
     "test": "nodeunit tests/test.js",
-    "coveralls": "jscoverage lib && QUICKSORT_COV=1 nodeunit --reporter=lcov test | coveralls"
+    "coveralls": "jscoverage lib && QUICKSORT_COV=1 nodeunit --reporter=lcov tests/test.js | coveralls"
   }
 }
