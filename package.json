@@ -16,11 +16,12 @@
   "dependencies": {},
   "devDependencies": {
     "coveralls": "^2.11.2",
-    "jscoverage": "^0.5.6",
+    "istanbul": "^0.3.2",
+    "istanbul-coveralls": "^1.0.1",
     "nodeunit": "^0.9.0"
   },
   "scripts": {
     "test": "nodeunit tests/test.js",
-    "coveralls": "jscoverage Geojson2Wkt.js && QUICKSORT_COV=1 nodeunit --reporter=lcov tests/test.js | coveralls"
+    "coveralls": "istanbul cover nodeunit tests/test.js && istanbul-coveralls"
   }
 }
