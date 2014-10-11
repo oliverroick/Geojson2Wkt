@@ -2,7 +2,7 @@
 
 Node module to convert [GeoJSON](http://geojson.org/) geometry objects or string representations into [WKT](http://en.wikipedia.org/wiki/Well-known_text) format.
 
-[![Build Status](https://travis-ci.org/oliverroick/Geojson2Wkt.svg?branch=master)](https://travis-ci.org/oliverroick/Geojson2Wkt)
+[![Build Status](https://travis-ci.org/oliverroick/Geojson2Wkt.svg?branch=master)](https://travis-ci.org/oliverroick/Geojson2Wkt) [![Coverage Status](https://coveralls.io/repos/oliverroick/Geojson2Wkt/badge.png?branch=master)](https://coveralls.io/r/oliverroick/Geojson2Wkt?branch=master)
 
 ## Install
 
