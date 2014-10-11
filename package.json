@@ -1,16 +1,26 @@
 {
-    "name": "geojson2wkt"
-  , "author": "Oliver Roick"
-  , "version": "1.0.0"
-  , "description": "Converter to parse GeoJSON geometries in WKT format"
-  , "keywords": [
-         "GeoJSON",
-         "WKT"
-    ]
-  , "license": "MIT"
-  , "repository": "git://github.com/oliverroick/Geojson2Wkt"
-  , "main": "./Geojson2Wkt.js"
-  , "engines": { "node": "*" }
-  , "dependencies": {
-    }
+  "name": "geojson2wkt",
+  "author": "Oliver Roick",
+  "version": "1.0.0",
+  "description": "Converter to parse GeoJSON geometries in WKT format",
+  "keywords": [
+    "GeoJSON",
+    "WKT"
+  ],
+  "license": "MIT",
+  "repository": "git://github.com/oliverroick/Geojson2Wkt",
+  "main": "./Geojson2Wkt.js",
+  "engines": {
+    "node": "*"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "coveralls": "^2.11.2",
+    "jscoverage": "^0.5.6",
+    "nodeunit": "^0.9.0"
+  },
+  "scripts": {
+    "test": "nodeunit tests/test.js",
+    "coveralls": "jscoverage lib && QUICKSORT_COV=1 nodeunit --reporter=lcov test | coveralls"
+  }
 }
